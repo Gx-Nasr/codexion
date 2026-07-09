@@ -6,25 +6,33 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/08 09:36:45 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/09 19:28:00 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int coders_and_dongles_init(t_sim *sim, t_data *data)
+int coders_init(t_sim *sim, t_data *data)
 {
     int i;
     t_coder *coders = malloc(data->number_of_coders * sizeof(t_coder));
     if (!coders)
         return (0);
-    
+
     i = 0;
     while (i < data->number_of_coders)
     {
         coders[i].sim = sim;
         coders[i].id = i;
         coders[i].compile_count = 0;
+        coders[i].last_compile = 0;
+
+        if (pthread_mutex_init(&coders[i].c_mutex, NULL) != 0)
+            return (free(coders), 0);
+
+        coders[i].left_dongle = &sim->dongles[i];
+        coders[i].right_dongle = &sim->dongles[(i+1)%data->number_of_coders];
+
         ++i;
     }
     sim->coders = coders;
@@ -43,6 +51,13 @@ int dongles_init(t_sim *sim, t_data *data)
     {
         dongles[i].is_taken = 0;
         dongles[i].size_queue = 0;
+        dongles[i].available_at = 0;
+
+        if (pthread_mutex_init(&dongles[i].d_mutex, NULL) != 0)
+            return (free(dongles), 0);
+        if (pthread_cond_init(&dongles[i].d_cond, NULL) != 0)
+            return (free(dongles), 0);
+
         ++i;
     }
     sim->dongles = dongles;
@@ -56,5 +71,10 @@ int sim_init(t_sim *sim, t_data *data)
         return (0);
     if (!coders_init(sim, data))
         return (free(sim->dongles), 0);
+    if (pthread_mutex_init(&sim->s_mutex, NULL) != 0)
+        return (free(sim->dongles), free(sim->coders), 0);
+
     sim->is_finished = 0;
+    sim->start_time = 0;
+    return (1);
 }
