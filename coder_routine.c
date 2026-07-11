@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   coder_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/01 10:53:47 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/11 16:31:27 by nel-adao         ###   ########.fr       */
+/*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
+/*   Updated: 2026/07/11 16:36:05 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-
-int print_error(char *s)
+void *coder_routine(void *arg)
 {
-    printf("%s", s);
-    return (1);
-}
+    t_coder *coder;
 
-int main(int ac, char **av)
-{
-    t_data data;
-    t_sim sim;
+    coder = (t_coder *)arg;
 
-    if (ac != 9)
-        return print_error("error");
-    if (!data_init(av, &data))
-        return print_error("error");
-    if (!sim_init(&sim, &data))
-        return (1);
-    if (!creat_threads(sim.coders, data.number_of_coders))
-        return (1);
-    sim.start = 1;
-    return 0;
+    return (NULL);
 }

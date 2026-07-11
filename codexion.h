@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:47:15 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/09 19:09:03 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:31:43 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 
 typedef struct s_sim t_sim;
 
@@ -72,9 +73,13 @@ typedef struct s_sim
     pthread_mutex_t s_mutex;
     long start_time;
     int is_finished;
+    int start;
 
 } t_sim;
 
 
 
 int data_init(char **av, t_data *data);
+int sim_init(t_sim *sim, t_data *data);
+void *coder_routine(void *arg);
+int creat_threads(t_coder *coders, int n_coders);

@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/09 19:28:00 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:15:02 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int coders_init(t_sim *sim, t_data *data)
 
         coders[i].left_dongle = &sim->dongles[i];
         coders[i].right_dongle = &sim->dongles[(i+1)%data->number_of_coders];
-
         ++i;
     }
     sim->coders = coders;
@@ -76,5 +75,6 @@ int sim_init(t_sim *sim, t_data *data)
 
     sim->is_finished = 0;
     sim->start_time = 0;
+    sim->start = 0;
     return (1);
 }
