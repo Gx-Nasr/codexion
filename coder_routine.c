@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/13 16:18:49 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/14 06:51:40 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,8 @@ int end_checker(t_sim *sim)
 
     return is_finished;
 }
-void push_req(t_request *request, t_dongle *dongle, int is_edf)
-{
-    if (dongle->size_queue == 0)
-        dongle->queue[0] = *request;
-    else if(dongle->size_queue == 1)
-        dongle->queue[1] = *request;
 
-    dongle->size_queue += 1;
-    if (is_edf)
-        sort_edf(dongle);
-}
-
-
-
-int request_dongel(t_coder *coder, t_dongle *dongle)
+int take_dongel(t_coder *coder, t_dongle *dongle)
 {
     t_request request;
     int burnout_time;
@@ -48,9 +35,21 @@ int request_dongel(t_coder *coder, t_dongle *dongle)
     push_req(&request, coder->left_dongle, coder->sim->data.is_edf);
     while (dongle->available_at > get_time_ms() || dongle->queue[0].id != coder->id || dongle->is_taken)
     {
-        
+        if (dongle->queue[0].id != coder->id || dongle->is_taken)
+            pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
+        if (dongle->available_at > get_time_ms())
+        {
+            struct timespec t_wait;
+            cond_wait_time(&t_wait, dongle->available_at);
+            pthread_cond_timedwait(&dongle->d_cond, &dongle->d_mutex, &t_wait);
+        }
+        if (end_checker(coder->sim))
+            return (0);
     }
-    
+    dongle->is_taken = 1;
+    pop_req(dongle);
+    pthread_mutex_unlock(&dongle->d_mutex);
+    return(1);
 }
 
 void *coder_routine(void *arg)
