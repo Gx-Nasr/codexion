@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/11 16:15:02 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/13 13:45:43 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int coders_init(t_sim *sim, t_data *data)
         coders[i].sim = sim;
         coders[i].id = i;
         coders[i].compile_count = 0;
-        coders[i].last_compile = 0;
+        coders[i].last_compile_t = 0;
 
         if (pthread_mutex_init(&coders[i].c_mutex, NULL) != 0)
             return (free(coders), 0);
@@ -74,7 +74,7 @@ int sim_init(t_sim *sim, t_data *data)
         return (free(sim->dongles), free(sim->coders), 0);
 
     sim->is_finished = 0;
-    sim->start_time = 0;
+    sim->start_time = get_time_ms();
     sim->start = 0;
     return (1);
 }

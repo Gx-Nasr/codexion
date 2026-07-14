@@ -6,13 +6,13 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:53:51 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/06 11:22:40 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/13 15:37:06 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int ft_is_fifo(char *s)
+static int ft_is_edf(char *s)
 {
     int i;
     char *fifo;
@@ -70,7 +70,7 @@ static int data_checker(t_data *data)
 		return (0);
     if (data->number_of_coders <= 0 || data->n_of_compiles_req <= 0)
         return (0);
-    if (data->is_fifo < 0 || data->dongle_cooldown < 0)
+    if (data->is_edf < 0 || data->dongle_cooldown < 0)
         return (0);
     return (1);
 }
@@ -84,7 +84,7 @@ int data_init(char **av, t_data *data)
     data->time_to_refactor = ft_atoi(av[5]);
     data->n_of_compiles_req = ft_atoi(av[6]);
     data->dongle_cooldown = ft_atoi(av[7]);
-    data->is_fifo = ft_is_fifo(av[8]);
+    data->is_edf = ft_is_edf(av[8]);
     if (!data_checker(data))
         return (0);
     return (1);
