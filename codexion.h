@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:47:15 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/14 06:50:48 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/14 12:52:40 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,3 +88,5 @@ void sort_edf(t_dongle *dongle);
 void cond_wait_time(struct timespec *t_s, long time);
 void push_req(t_request *request, t_dongle *dongle, int is_edf);
 void pop_req(t_dongle *dongle);
+int end_checker(t_sim *sim);
+int sleepr(long sleep_time, t_sim *sim);
