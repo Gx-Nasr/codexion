@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:53:51 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/13 15:37:06 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/15 13:47:24 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int ft_is_edf(char *s)
 
 static int ft_atoi(char *s)
 {
-    long number;
+    long long number;
     int i;
 
     number = 0;

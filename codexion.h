@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:47:15 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/14 12:52:40 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/15 14:15:26 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ typedef struct s_data
 typedef struct s_request
 {
     int id;
-    long preorety;
+    long long preorety;
 
 } t_request;
 
 typedef struct s_dongle
 {
     int is_taken;
-    long available_at;
+    long long available_at;
 
     t_request queue[2];
     int size_queue;
@@ -57,7 +57,7 @@ typedef struct s_coder
     t_sim *sim;
     int             id;
     int             compile_count;
-    long            last_compile_t;
+    long long            last_compile_t;
     pthread_t       thread;
     pthread_mutex_t c_mutex;
     t_dongle *left_dongle;
@@ -71,7 +71,7 @@ typedef struct s_sim
     t_coder *coders;
     t_dongle *dongles;
     pthread_mutex_t s_mutex;
-    long start_time;
+    long long start_time;
     int is_finished;
     int start;
 
@@ -83,10 +83,11 @@ int data_init(char **av, t_data *data);
 int sim_init(t_sim *sim, t_data *data);
 void *coder_routine(void *arg);
 int creat_threads(t_coder *coders, int n_coders);
-long get_time_ms();
+long long get_time_ms();
 void sort_edf(t_dongle *dongle);
-void cond_wait_time(struct timespec *t_s, long time);
+void cond_wait_time(struct timespec *t_s, long long time);
 void push_req(t_request *request, t_dongle *dongle, int is_edf);
 void pop_req(t_dongle *dongle);
 int end_checker(t_sim *sim);
-int sleepr(long sleep_time, t_sim *sim);
+int sleepr(long long sleep_time, t_sim *sim);
+void cleaner(t_sim *sim, int i, int is_destroy);

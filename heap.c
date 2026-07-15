@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 09:44:10 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/14 06:49:59 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/15 15:41:26 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void push_req(t_request *request, t_dongle *dongle, int is_edf)
 
 void sort_edf(t_dongle *dongle)
 {
-    long pre0;
-    long pre1;
+    long long pre0;
+    long long pre1;
     t_request tmp;
 
     pre0 = dongle->queue[0].preorety;
@@ -47,7 +47,9 @@ void sort_edf(t_dongle *dongle)
     if (dongle->size_queue == 2)
     {
         if (pre0 > pre1)
+        {
             dongle->queue[0] = dongle->queue[1];
             dongle->queue[1] = tmp;
+        }
     }
 }

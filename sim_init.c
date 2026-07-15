@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/14 14:11:17 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/15 13:22:41 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int sim_init(t_sim *sim, t_data *data)
         return (free(sim->dongles), free(sim->coders), 0);
 
     sim->is_finished = 0;
-    sim->start_time = get_time_ms();
     sim->start = 0;
     return (1);
 }
