@@ -6,11 +6,19 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:25:11 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:55:15 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+void	coder_helper(t_coder *coder, t_sim *sim, int id)
+{
+	coder->sim = sim;
+	coder->id = id;
+	coder->compile_count = 0;
+	coder->last_compile_t = get_time_ms();
+}
 
 int	coders_init(t_sim *sim, t_data *data)
 {
@@ -23,15 +31,12 @@ int	coders_init(t_sim *sim, t_data *data)
 	i = 0;
 	while (i < data->number_of_coders)
 	{
-		coders[i].sim = sim;
-		coders[i].id = i;
-		coders[i].compile_count = 0;
-		coders[i].last_compile_t = get_time_ms();
-		if (pthread_mutex_init(&coders[i].c_mutex, NULL) != 0)
-			return (free(coders), 0);
+		coder_helper(&coders[i], sim, i);
 		coders[i].left_dongle = &sim->dongles[i];
 		coders[i].right_dongle = &sim->dongles[(i + 1)
 			% data->number_of_coders];
+		if (pthread_mutex_init(&coders[i].c_mutex, NULL) != 0)
+			return (free(coders), 0);
 		if (i % 2)
 		{
 			coders[i].right_dongle = &sim->dongles[i];

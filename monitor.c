@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/14 06:46:59 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:51:25 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:58:33 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,17 @@
 
 void	finish(t_sim *sim)
 {
+	int	i;
+
+	i = 0;
 	pthread_mutex_lock(&sim->s_mutex);
 	sim->is_finished = 1;
 	pthread_mutex_unlock(&sim->s_mutex);
+	while (i < sim->data.number_of_coders)
+	{
+		pthread_cond_broadcast(&sim->dongles[i].d_cond);
+		++i;
+	}
 }
 
 int	monitor_checker(t_coder *coder)
@@ -28,8 +36,7 @@ int	monitor_checker(t_coder *coder)
 	if (get_time_ms() > coder->last_compile_t + burnout_t)
 	{
 		finish(coder->sim);
-		printf("%lld %d burned out\n", get_time_ms()
-			- coder->sim->start_time, coder->id);
+		print_log("burned out", coder);
 		pthread_mutex_unlock(&coder->c_mutex);
 		return (-1);
 	}

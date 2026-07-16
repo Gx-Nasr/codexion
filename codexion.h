@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:47:15 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:58:15 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 14:01:34 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,9 @@ int			end_checker(t_sim *sim);
 int			sleepr(long long sleep_time, t_sim *sim);
 void		cleaner(t_sim *sim, int i, int is_destroy);
 void		monitor(t_sim *sim);
+void		print_log(char *str, t_coder *coder);
+void		ft_start(t_sim *sim);
+int			end_checker(t_sim *sim);
+void		ft_compile(t_coder *coder);
 
 #endif

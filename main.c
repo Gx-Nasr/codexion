@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:53:47 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:54:04 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:56:25 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	main(int ac, char **av)
 {
 	t_data	data;
 	t_sim	sim;
+	int		i;
 
+	i = 0;
 	if (ac != 9)
 		return (printf("error\n"), 1);
 	if (!data_init(av, &data))
@@ -28,6 +30,8 @@ int	main(int ac, char **av)
 	sim.start_time = get_time_ms();
 	sim.start = 1;
 	monitor(&sim);
+	while (i < data.number_of_coders)
+		pthread_join(sim.coders[i++].thread, NULL);
 	cleaner(&sim, 0, 0);
 	return (0);
 }

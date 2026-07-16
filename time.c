@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/13 12:34:30 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:28:14 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 13:55:46 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,18 @@ void	cond_wait_time(struct timespec *t_s, long long time)
 
 int	sleepr(long long sleep_time, t_sim *sim)
 {
-	long long	premary_time;
+	long long	start;
 	long long	time;
 
-	premary_time = get_time_ms();
-	time = 0;
-	while (time <= sleep_time)
+	start = get_time_ms();
+	while (1)
 	{
-		usleep(200);
 		if (end_checker(sim))
 			return (0);
-		time = get_time_ms() - premary_time;
+		time = get_time_ms() - start;
+		if (time >= sleep_time)
+			break ;
+		usleep(500);
 	}
 	return (1);
 }
