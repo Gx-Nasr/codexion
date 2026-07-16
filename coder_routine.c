@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 14:14:30 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 15:12:18 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	take_dongel(t_coder *coder, t_dongle *dongle)
 {
 	t_request			request;
 	int					burnout_time;
-	struct timespec		t_wait;
 
 	burnout_time = coder->sim->data.time_to_burnout;
 	request.id = coder->id;
@@ -99,10 +98,8 @@ int	do_the_routine(t_coder *coder)
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
-	int		cooldown_t;
 
 	coder = (t_coder *)arg;
-	cooldown_t = coder->sim->data.dongle_cooldown;
 	coder->last_compile_t = get_time_ms();
 	ft_start(coder->sim);
 	while (!end_checker(coder->sim))

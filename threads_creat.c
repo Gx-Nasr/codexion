@@ -6,13 +6,13 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:31:29 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 17:48:36 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 15:30:57 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	cleaner(t_sim *sim, int i, int is_destroy)
+void	cleaner(t_sim *sim, int i)
 {
 	while (i >= 0)
 	{
@@ -23,8 +23,7 @@ void	cleaner(t_sim *sim, int i, int is_destroy)
 	}
 	free(sim->coders);
 	free(sim->dongles);
-	if (is_destroy)
-		pthread_mutex_destroy(&sim->s_mutex);
+	pthread_mutex_destroy(&sim->s_mutex);
 }
 
 int	creat_threads(t_coder *coders, int n_coders)
@@ -44,7 +43,7 @@ int	creat_threads(t_coder *coders, int n_coders)
 			j = i;
 			while (j--)
 				pthread_join(coders[j].thread, NULL);
-			cleaner(coders[0].sim, i - 1, 1);
+			cleaner(coders[0].sim, i - 1);
 			return (0);
 		}
 		++i;

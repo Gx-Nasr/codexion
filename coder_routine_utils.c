@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 13:59:11 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 14:03:04 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 15:26:53 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 
 void	print_log(char *str, t_coder *coder)
 {
-	printf("%lld %d %s\n", get_time_ms()
-		- coder->sim->start_time, coder->id + 1, str);
+	long long	print_time;
+	int			id;
+
+	print_time = get_time_ms() - coder->sim->start_time;
+	id = coder->id + 1;
+	printf("%lld %d %s\n", print_time, id, str);
 }
 
 void	ft_start(t_sim *sim)

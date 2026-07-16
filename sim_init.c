@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 13:55:15 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/16 15:22:17 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	sim_init(t_sim *sim, t_data *data)
 	if (!coders_init(sim, data))
 		return (free(sim->dongles), 0);
 	if (pthread_mutex_init(&sim->s_mutex, NULL) != 0)
+		return (free(sim->dongles), free(sim->coders), 0);
+	if (pthread_mutex_init(&sim->print_mutex, NULL) != 0)
 		return (free(sim->dongles), free(sim->coders), 0);
 	sim->is_finished = 0;
 	sim->start = 0;
