@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/14 06:46:59 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 13:58:33 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/19 10:46:00 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	monitor_checker(t_coder *coder)
 	if (get_time_ms() > coder->last_compile_t + burnout_t)
 	{
 		finish(coder->sim);
-		print_log("burned out", coder);
+		print_log("burned out", coder, 1);
 		pthread_mutex_unlock(&coder->c_mutex);
 		return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 15:12:18 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/19 10:46:36 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,17 @@ int	take_dongel(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_req(&request, dongle, coder->sim->data.is_edf);
 	if (!wait_to_take_dongle(dongle, coder))
+	{
+		pthread_mutex_lock(&dongle->d_mutex);
 		return (0);
+	}
 	dongle->is_taken = 1;
 	pop_req(dongle);
-	print_log("has taken a dongle", coder);
+	if (!print_log("has taken a dongle", coder, 0))
+	{
+		pthread_mutex_unlock(&dongle->d_mutex);
+		return (0);
+	}
 	pthread_mutex_unlock(&dongle->d_mutex);
 	return (1);
 }
@@ -80,16 +87,19 @@ int	do_the_routine(t_coder *coder)
 	int		cooldown_t;
 
 	cooldown_t = coder->sim->data.dongle_cooldown;
-	print_log("is compiling", coder);
+	if (!print_log("is compiling", coder, 0))
+		return (0);
 	if (!sleepr(coder->sim->data.time_to_compile, coder->sim))
 		return (0);
 	ft_compile(coder);
 	put_dongles(coder->left_dongle,
 		coder->right_dongle, cooldown_t);
-	print_log("is debugging", coder);
+	if (!print_log("is debugging", coder, 0))
+		return (0);
 	if (!sleepr(coder->sim->data.time_to_debug, coder->sim))
 		return (0);
-	print_log("is refactoring", coder);
+	if (!print_log("is refactoring", coder, 0))
+		return (0);
 	if (!sleepr(coder->sim->data.time_to_refactor, coder->sim))
 		return (0);
 	return (1);
@@ -100,8 +110,8 @@ void	*coder_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	coder->last_compile_t = get_time_ms();
 	ft_start(coder->sim);
+	coder->last_compile_t = get_time_ms();
 	while (!end_checker(coder->sim))
 	{
 		if (!take_dongel(coder, coder->left_dongle)
