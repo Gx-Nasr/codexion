@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:53:47 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/21 08:55:50 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/21 11:17:59 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ int	main(int ac, char **av)
 
 	i = 0;
 	if (ac != 9)
-		return (printf("error\n"), 1);
+		return (printf("Usage: ./codexion <number_of_coders> <time_to_burnout> "
+				"<time_to_compile> <time_to_debug> <time_to_refactor> "
+				"<number_of_compiles> <dongle_cooldown> <fifo|edf>\n"), 1);
 	if (!data_init(av, &data))
-		return (printf("error\n"), 1);
+		return (printf("Error: Invalid input values.\n"), 1);
 	if (!sim_init(&sim, &data))
-		return (1);
+		return (printf("Error: Simulation initialization failed"
+				" (memory or mutex error).\n"), 1);
 	if (!creat_threads(sim.coders, data.number_of_coders))
-		return (1);
+		return (printf("Error: pthread_create() failed.\n"), 1);
 	run_threads(&sim);
 	monitor(&sim);
 	while (i < data.number_of_coders)
