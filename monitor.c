@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/14 06:46:59 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/19 10:46:00 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/21 08:51:19 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	finish(t_sim *sim)
 	pthread_mutex_unlock(&sim->s_mutex);
 	while (i < sim->data.number_of_coders)
 	{
+		pthread_mutex_lock(&sim->dongles[i].d_mutex);
 		pthread_cond_broadcast(&sim->dongles[i].d_cond);
+		pthread_mutex_unlock(&sim->dongles[i].d_mutex);
 		++i;
 	}
 }
@@ -35,9 +37,9 @@ int	monitor_checker(t_coder *coder)
 	pthread_mutex_lock(&coder->c_mutex);
 	if (get_time_ms() > coder->last_compile_t + burnout_t)
 	{
+		pthread_mutex_unlock(&coder->c_mutex);
 		finish(coder->sim);
 		print_log("burned out", coder, 1);
-		pthread_mutex_unlock(&coder->c_mutex);
 		return (-1);
 	}
 	if (coder->compile_count < coder->sim->data.n_of_compiles_req)
@@ -55,10 +57,8 @@ void	monitor(t_sim *sim)
 	int	res;
 	int	the_end;
 
-	pthread_mutex_lock(&sim->s_mutex);
-	while (!sim->is_finished)
+	while (1)
 	{
-		pthread_mutex_unlock(&sim->s_mutex);
 		i = 0;
 		the_end = 1;
 		while (i < sim->data.number_of_coders)
@@ -72,7 +72,7 @@ void	monitor(t_sim *sim)
 		if (the_end)
 			finish(sim);
 		usleep(1000);
-		pthread_mutex_lock(&sim->s_mutex);
+		if (end_checker(sim))
+			return ;
 	}
-	pthread_mutex_unlock(&sim->s_mutex);
 }

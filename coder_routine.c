@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/19 10:46:36 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/21 08:40:57 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ int	take_dongel(t_coder *coder, t_dongle *dongle)
 
 	burnout_time = coder->sim->data.time_to_burnout;
 	request.id = coder->id;
+	pthread_mutex_lock(&coder->c_mutex);
 	request.preorety = coder->last_compile_t + burnout_time - get_time_ms();
+	pthread_mutex_unlock(&coder->c_mutex);
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_req(&request, dongle, coder->sim->data.is_edf);
 	if (!wait_to_take_dongle(dongle, coder))
@@ -111,7 +113,9 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	ft_start(coder->sim);
+	pthread_mutex_lock(&coder->c_mutex);
 	coder->last_compile_t = get_time_ms();
+	pthread_mutex_unlock(&coder->c_mutex);
 	while (!end_checker(coder->sim))
 	{
 		if (!take_dongel(coder, coder->left_dongle)
