@@ -6,13 +6,13 @@
 #    By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/15 15:35:40 by nel-adao          #+#    #+#              #
-#    Updated: 2026/07/16 15:13:14 by nel-adao         ###   ########.fr        #
+#    Updated: 2026/07/21 09:35:15 by nel-adao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = codexion
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 SRC = main.c coder_routine.c data_init.c sim_init.c threads_creat.c heap.c time.c monitor.c  coder_routine_utils.c
 
