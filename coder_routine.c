@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/21 09:30:41 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/21 12:21:02 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ int	take_dongel(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_req(&request, dongle, coder->sim->data.is_edf);
 	if (!wait_to_take_dongle(dongle, coder))
-	{
-		pthread_mutex_lock(&dongle->d_mutex);
 		return (0);
-	}
 	dongle->is_taken = 1;
 	pop_req(dongle);
 	if (!print_log("has taken a dongle", coder, 0))
