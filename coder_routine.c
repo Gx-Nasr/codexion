@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/21 08:40:57 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/21 09:30:41 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ int	do_the_routine(t_coder *coder)
 	cooldown_t = coder->sim->data.dongle_cooldown;
 	if (!print_log("is compiling", coder, 0))
 		return (0);
+	ft_compile(coder);
 	if (!sleepr(coder->sim->data.time_to_compile, coder->sim))
 		return (0);
-	ft_compile(coder);
 	put_dongles(coder->left_dongle,
 		coder->right_dongle, cooldown_t);
 	if (!print_log("is debugging", coder, 0))
