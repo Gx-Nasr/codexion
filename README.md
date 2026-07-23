@@ -213,4 +213,4 @@ This project was developed for educational purposes at **1337 / 42 Network**.
 
 **Gx-Nasr**
 
-GitHub: https://github.com/Gx-NAsr
+GitHub: https://github.com/Gx-Nasr
