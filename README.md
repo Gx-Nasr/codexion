@@ -1,101 +1,216 @@
-*This project has been created as part of the 42 curriculum by nel-adao.*
+# 🚀 Codexion
 
-# Codexion
+> A multithreaded coding simulation written in C using POSIX Threads, Mutexes, and Condition Variables.
 
-## Description
+Codexion is a synchronization project inspired by the classic Dining Philosophers problem.  
+Each **Coder** is represented by a thread competing for shared **Dongles** (resources) in order to compile code before reaching burnout.
 
-Codexion is a multithreaded synchronization project inspired by the classic Dining Philosophers problem. The goal is to simulate multiple coders competing for shared resources (dongles) while preventing common concurrency issues such as deadlocks, starvation, and race conditions.
-
-The project supports two scheduling policies:
-
-* **FIFO (First In, First Out)**
-* **EDF (Earliest Deadline First)**
-
-A custom priority queue (heap) is used to manage access to shared resources according to the selected scheduling algorithm.
+The project focuses on concurrent programming, synchronization primitives, scheduling algorithms, and race-condition prevention.
 
 ---
 
-## Instructions
+## ✨ Features
 
-### Compile
+- 🧵 Multithreaded simulation using POSIX Threads.
+- 🔒 Safe synchronization using Mutexes.
+- 📢 Condition Variables for efficient waiting.
+- ⚡ FIFO and EDF scheduling modes.
+- ⏱️ Millisecond-precision timing.
+- 💀 Burnout detection by a dedicated monitor.
+- 🧠 Deadlock-free resource acquisition.
+- 🧹 Proper cleanup of allocated memory and synchronization objects.
+
+---
+
+## 🏗️ Architecture
+
+```
+                +----------------+
+                |    Monitor     |
+                +----------------+
+                       |
+        ---------------------------------
+        |               |               |
+    Coder 1         Coder 2         Coder N
+        |               |               |
+      Dongles ------ Shared Resources ------
+```
+
+---
+
+## ⚙️ Build
 
 ```bash
 make
 ```
 
-### Run
+Run:
 
 ```bash
-./codexion number_of_coders time_to_burnout time_to_compile \
-time_to_debug time_to_refactor number_of_compiles \
-dongle_cooldown fifo|edf
+./codexion \
+<number_of_coders> \
+<time_to_burnout> \
+<time_to_compile> \
+<time_to_debug> \
+<time_to_refactor> \
+<number_of_compiles> \
+<dongle_cooldown> \
+<fifo|edf>
 ```
 
-### Example
+Example:
 
 ```bash
-./codexion 5 600 200 200 100 2 0 edf
+./codexion 5 800 200 100 100 5 50 fifo
 ```
 
-Arguments:
+---
 
-* `number_of_coders` – Number of coder threads.
-* `time_to_burnout` – Maximum time without compiling.
-* `time_to_compile` – Compilation duration.
-* `time_to_debug` – Debugging duration.
-* `time_to_refactor` – Refactoring duration.
-* `number_of_compiles` – Required compile count before stopping.
-* `dongle_cooldown` – Cooldown after releasing a dongle.
-* `fifo | edf` – Scheduling policy.
+## 🧵 Synchronization
+
+The project uses:
+
+- `pthread_create`
+- `pthread_join`
+- `pthread_mutex_init`
+- `pthread_mutex_lock`
+- `pthread_mutex_unlock`
+- `pthread_mutex_destroy`
+- `pthread_cond_init`
+- `pthread_cond_wait`
+- `pthread_cond_timedwait`
+- `pthread_cond_broadcast`
+- `pthread_cond_destroy`
+
+All shared data is protected with mutexes to prevent data races.
 
 ---
 
-## Blocking Cases Handled
+## 📋 Scheduling
 
-The implementation handles the following concurrency issues:
+### FIFO
 
-* Deadlock prevention by alternating the order in which coders acquire dongles.
-* Starvation prevention using FIFO or EDF scheduling.
-* Cooldown handling after releasing a dongle before it becomes available again.
-* Precise burnout detection through a dedicated monitor thread.
-* Serialized logging to avoid mixed or corrupted output.
-* Safe program termination by waking waiting threads when the simulation ends.
+Requests are handled in the order they arrive.
 
----
-
-## Thread Synchronization Mechanisms
-
-The project uses the following synchronization primitives:
-
-* **pthread_mutex_t**
-
-  * Protects shared data such as coder state, dongles, logging, and simulation status.
-  * Prevents race conditions while reading or modifying shared resources.
-
-* **pthread_cond_t**
-
-  * Allows coders to wait until a dongle becomes available.
-  * Used together with timed waits to support cooldown handling.
-
-* **Monitor Thread**
-
-  * Continuously checks burnout conditions and compile limits.
-  * Stops the simulation safely and notifies all waiting threads.
-
-These mechanisms ensure thread-safe communication between coders and the monitor while coordinating access to shared resources.
+```
+Coder 1
+Coder 2
+Coder 3
+```
 
 ---
 
-## Resources
+### EDF (Earliest Deadline First)
 
-### Documentation
+Priority is calculated from each coder's remaining time before burnout.
 
-* POSIX Threads (pthreads)
-* Linux `pthread` Manual Pages
-* Valgrind (Memcheck & Helgrind)
-* The Dining Philosophers Problem
-* 42 Subject Documentation
+The coder with the earliest deadline receives the dongle first.
 
-### AI Usage
+---
 
-AI was used primarily as a learning aid to better understand multithreading concepts, synchronization mechanisms, and concurrency theory. It was also used to suggest edge cases for testing and validation. The implementation, debugging, design decisions, and final code were developed and completed manually.
+## 📂 Project Structure
+
+```
+.
+├── main.c
+├── parser.c
+├── init.c
+├── monitor.c
+├── routine.c
+├── logger.c
+├── queue.c
+├── utils.c
+├── cleanup.c
+├── codexion.h
+└── Makefile
+```
+
+---
+
+## 🛡️ Thread Safety
+
+The simulation protects:
+
+- compile count
+- last compile time
+- simulation state
+- start flag
+- printing
+- dongle ownership
+- request queues
+
+using mutexes and condition variables.
+
+---
+
+## 📊 Simulation Flow
+
+```
+Create Threads
+      │
+      ▼
+Wait For Start Signal
+      │
+      ▼
+Request Dongles
+      │
+      ▼
+Acquire Dongles
+      │
+      ▼
+Compile
+      │
+      ▼
+Debug
+      │
+      ▼
+Refactor
+      │
+      ▼
+Release Dongles
+      │
+      ▼
+Repeat
+```
+
+---
+
+## 🎯 Learning Objectives
+
+This project demonstrates:
+
+- Concurrent Programming
+- POSIX Threads
+- Mutex Synchronization
+- Condition Variables
+- Race Condition Prevention
+- Deadlock Avoidance
+- Scheduling Algorithms
+- Resource Management
+- Memory Management
+- Thread Lifecycle
+
+---
+
+## 🛠️ Technologies
+
+- C
+- POSIX Threads
+- Mutex
+- Condition Variables
+- Makefile
+- Linux
+
+---
+
+## 📄 License
+
+This project was developed for educational purposes at **1337 / 42 Network**.
+
+---
+
+## 👤 Author
+
+**Gx-Nasr**
+
+GitHub: https://github.com/Gx-NAsr
