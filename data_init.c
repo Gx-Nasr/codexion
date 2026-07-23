@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:53:51 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/15 16:30:22 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/23 12:02:50 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	ft_is_edf(char *s)
 		++i;
 	}
 	if (!s[i] && !fifo[i])
-		return (1);
+		return (0);
 	i = 0;
 	while (s[i])
 	{
@@ -37,7 +37,7 @@ static int	ft_is_edf(char *s)
 		++i;
 	}
 	if (!s[i] && !edf[i])
-		return (0);
+		return (1);
 	return (-1);
 }
 

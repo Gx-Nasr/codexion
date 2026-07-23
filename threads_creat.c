@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:31:29 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/16 15:30:57 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/22 09:44:46 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	cleaner(t_sim *sim, int i)
 	free(sim->coders);
 	free(sim->dongles);
 	pthread_mutex_destroy(&sim->s_mutex);
+	pthread_mutex_destroy(&sim->print_mutex);
 }
 
 int	creat_threads(t_coder *coders, int n_coders)

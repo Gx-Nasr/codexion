@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 11:20:39 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/21 12:34:26 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/23 11:30:51 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	clean_mutexs(t_sim *sim, int i, int is_coder)
 void	coder_helper(t_coder *coder, t_sim *sim, int id)
 {
 	coder->sim = sim;
-	coder->id = id;
+	coder->id = id + 1;
 	coder->compile_count = 0;
 	coder->last_compile_t = get_time_ms();
 }

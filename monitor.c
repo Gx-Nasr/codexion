@@ -6,11 +6,21 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/14 06:46:59 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/21 08:51:19 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/23 11:33:29 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+int	end_checker(t_sim *sim)
+{
+	int	is_finished;
+
+	pthread_mutex_lock(&sim->s_mutex);
+	is_finished = sim->is_finished;
+	pthread_mutex_unlock(&sim->s_mutex);
+	return (is_finished);
+}
 
 void	finish(t_sim *sim)
 {

@@ -6,7 +6,7 @@
 #    By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/15 15:35:40 by nel-adao          #+#    #+#              #
-#    Updated: 2026/07/21 09:35:15 by nel-adao         ###   ########.fr        #
+#    Updated: 2026/07/23 13:24:48 by nel-adao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,5 +36,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all bonus clean fclean re
-
-.SECONDARY: $(OBJ)
