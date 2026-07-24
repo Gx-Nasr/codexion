@@ -6,7 +6,7 @@
 /*   By: nel-adao <nel-adao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 11:55:56 by nel-adao          #+#    #+#             */
-/*   Updated: 2026/07/23 11:48:25 by nel-adao         ###   ########.fr       */
+/*   Updated: 2026/07/23 20:45:12 by nel-adao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ void	*coder_routine(void *arg)
 
 	coder = (t_coder *)arg;
 	ft_start(coder->sim);
-	if (coder->id % 2)
-		usleep(20);
 	pthread_mutex_lock(&coder->c_mutex);
 	coder->last_compile_t = get_time_ms();
 	pthread_mutex_unlock(&coder->c_mutex);
+	if (coder->id % 2)
+		usleep(100);
 	while (!end_checker(coder->sim))
 	{
 		request_dongels(coder, coder->left_dongle, coder->right_dongle);
