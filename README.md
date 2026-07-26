@@ -161,13 +161,13 @@ Acquire Dongles
 Compile
       │
       ▼
+Release Dongles
+      │
+      ▼
 Debug
       │
       ▼
 Refactor
-      │
-      ▼
-Release Dongles
       │
       ▼
 Repeat
