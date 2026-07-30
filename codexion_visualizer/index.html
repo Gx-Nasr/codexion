@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codexion — Simulation Visualizer &amp; Validator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-left">
+        <div class="logo"><span class="logo-bracket">&lt;</span>/<span class="logo-bracket">&gt;</span></div>
+        <div class="header-text">
+          <h1>Codexion <span class="accent">Visualizer</span></h1>
+          <p class="subtitle">Multithreaded Simulation Replay &amp; Validation</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <kbd>Space</kbd> play/pause &nbsp; <kbd>&larr;</kbd><kbd>&rarr;</kbd> step
+      </div>
+    </header>
+
+    <main>
+      <section id="input-section" class="card">
+        <div class="card-head">
+          <h2>Input</h2>
+          <span class="tag">Configuration &amp; Output</span>
+        </div>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="params-input">Simulation Configuration</label>
+            <input type="text" id="params-input" spellcheck="false" autocomplete="off"
+              placeholder="4 800 200 200 200 4 200 fifo">
+            <div class="input-hint">
+              <code>coders</code> <code>burnout</code> <code>compile</code>
+              <code>debug</code> <code>refactor</code> <code>compiles</code>
+              <code>cooldown</code> <code>fifo|edf</code>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="output-input">Simulation Output</label>
+            <textarea id="output-input" rows="12" spellcheck="false"
+              placeholder="Paste simulation output here...&#10;&#10;Example:&#10;0 2 has taken a dongle&#10;0 2 is compiling&#10;200 2 is debugging"></textarea>
+          </div>
+        </div>
+        <div class="input-actions">
+          <div class="actions-left">
+            <button class="btn btn-subtle" id="load-example">Load Example</button>
+            <label class="btn btn-subtle" for="file-upload">Upload File</label>
+            <input type="file" id="file-upload" accept=".txt,.log,.out" hidden>
+          </div>
+          <button class="btn btn-accent" id="parse-btn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>
+            Parse &amp; Visualize
+          </button>
+        </div>
+      </section>
+
+      <section id="viz-section" class="hidden">
+        <div class="stats-bar" id="stats-bar">
+          <div class="stat"><div class="stat-val" id="stat-coders">-</div><div class="stat-lbl">Coders</div></div>
+          <div class="stat"><div class="stat-val" id="stat-dongles">-</div><div class="stat-lbl">Dongles</div></div>
+          <div class="stat"><div class="stat-val" id="stat-events">-</div><div class="stat-lbl">Events</div></div>
+          <div class="stat"><div class="stat-val" id="stat-duration">-</div><div class="stat-lbl">Duration</div></div>
+          <div class="stat"><div class="stat-val" id="stat-scheduler">-</div><div class="stat-lbl">Scheduler</div></div>
+          <div class="stat"><div class="stat-val accent" id="stat-completed">-</div><div class="stat-lbl">Completed</div></div>
+          <div class="stat"><div class="stat-val danger" id="stat-burned">-</div><div class="stat-lbl">Burned</div></div>
+        </div>
+
+        <div class="controls card">
+          <div class="playback">
+            <button class="ctrl" id="btn-start" title="Go to start (Home)">&#9198;</button>
+            <button class="ctrl" id="btn-step-back" title="Step back (Left)">&#9194;</button>
+            <button class="ctrl ctrl-main" id="btn-play" title="Play / Pause (Space)">&#9654;</button>
+            <button class="ctrl" id="btn-step-fwd" title="Step forward (Right)">&#9193;</button>
+            <button class="ctrl" id="btn-end" title="Go to end (End)">&#9197;</button>
+          </div>
+          <div class="speed-group">
+            <span class="speed-lbl">Speed</span>
+            <input type="range" id="speed-slider" min="0.25" max="5" step="0.25" value="1" class="range">
+            <span class="speed-val" id="speed-value">1x</span>
+          </div>
+          <div class="scrub-group">
+            <span class="time-badge" id="scrubber-current">0 ms</span>
+            <input type="range" id="scrubber" min="0" max="100" step="0.1" value="0" class="range">
+            <span class="time-badge" id="scrubber-total">0 ms</span>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span class="leg"><i class="dot" style="background:var(--c-compiling)"></i>Compiling</span>
+          <span class="leg"><i class="dot" style="background:var(--c-debugging)"></i>Debugging</span>
+          <span class="leg"><i class="dot" style="background:var(--c-refactoring)"></i>Refactoring</span>
+          <span class="leg"><i class="dot" style="background:var(--c-idle)"></i>Idle</span>
+          <span class="leg"><i class="dot" style="background:var(--c-done)"></i>Done</span>
+          <span class="leg"><i class="dot" style="background:var(--c-burned)"></i>Burned Out</span>
+          <span class="leg"><i class="dot" style="background:var(--c-err)"></i>Validation Error</span>
+        </div>
+
+        <div class="tl-card card">
+          <div class="tl-scroll" id="tl-scroll">
+            <div class="tl-axis" id="tl-axis"></div>
+            <div class="tl-body" id="tl-body"></div>
+            <div class="tl-indicator" id="tl-indicator"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Dongle Status</h2></div>
+          <div class="dongle-grid" id="dongle-grid"></div>
+        </div>
+
+        <div class="card" id="validation-section">
+          <div class="card-head"><h2>Validation Results</h2></div>
+          <div class="val-summary" id="val-summary"></div>
+          <div class="val-details" id="val-details"></div>
+        </div>
+
+        <div class="card log-card">
+          <div class="card-head"><h2>Event Log</h2></div>
+          <div class="log-body" id="log-body"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">Codexion Visualizer &mdash; 42 Project Tool</footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
