@@ -166,7 +166,7 @@ Automatically detect violations and display detailed validation results.
 
 ---
 
-## Event Log & Details
+## Error display
 
 <p align="center">
 
