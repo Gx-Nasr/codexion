@@ -232,7 +232,7 @@ The parser automatically reconstructs the complete simulation from these events.
 
 The project is available online:
 
-## 👉 **[https://YOUR_GITHUB_PAGES_LINK](https://gx-nasr.github.io/codexion/)**
+## 👉 **[VISUALIZER LINK](https://gx-nasr.github.io/codexion/)**
 
 ---
 
